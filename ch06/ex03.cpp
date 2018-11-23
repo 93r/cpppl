@@ -1,4 +1,4 @@
-// includes handling of excersize 14
+// includes handling of excersize 12
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -37,9 +37,9 @@ int main()
 
 	std::vector<decltype(value)> totals;
 	for (auto& [k, v] : m) {
-		decltype(value) sum = std::accumulate(v.begin(), v.end(), 0.0);
+		decltype(value) sum = std::accumulate(v.begin(), v.end(), decltype(value){0});
 		decltype(value) avg = sum/v.size();
-		decltype(value) mdn = 0.0;
+		decltype(value) mdn = 0;
 
 		std::sort(v.begin(), v.end());
 		mdn = median(v);
@@ -54,9 +54,9 @@ int main()
 	}
 
 	auto& v = totals;
-	decltype(value) sum = std::accumulate(v.begin(), v.end(), 0.0);
+	decltype(value) sum = std::accumulate(v.begin(), v.end(), decltype(value){0});
 	decltype(value) avg = sum/v.size();
-	decltype(value) mdn = 0.0;
+	decltype(value) mdn = 0;
 
 	std::sort(v.begin(), v.end());
 	mdn = median(v);
