@@ -9,7 +9,7 @@
 template<typename T>
 T median(const std::vector<T>& v)
 {
-	T mdn {0};
+	T mdn {};
 
 	if (v.size() % 2 == 0) {
 		mdn = (
@@ -37,9 +37,9 @@ int main()
 
 	std::vector<decltype(value)> totals;
 	for (auto& [k, v] : m) {
-		decltype(value) sum = std::accumulate(v.begin(), v.end(), decltype(value){0});
+		decltype(value) sum = std::accumulate(v.begin(), v.end(), decltype(value){});
 		decltype(value) avg = sum/v.size();
-		decltype(value) mdn = 0;
+		decltype(value) mdn = {};
 
 		std::sort(v.begin(), v.end());
 		mdn = median(v);
@@ -54,9 +54,9 @@ int main()
 	}
 
 	auto& v = totals;
-	decltype(value) sum = std::accumulate(v.begin(), v.end(), decltype(value){0});
+	decltype(value) sum = std::accumulate(v.begin(), v.end(), decltype(value){});
 	decltype(value) avg = sum/v.size();
-	decltype(value) mdn = 0;
+	decltype(value) mdn = {};
 
 	std::sort(v.begin(), v.end());
 	mdn = median(v);
