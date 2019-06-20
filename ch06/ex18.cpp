@@ -19,11 +19,13 @@ Token_value curr_tok = Token_value::print;
 double expr(bool); // add and subtract
 double term(bool); // multiply and divide
 double prim(bool); // handle primaries
-Token_value get_token();
+Token_value get_token(istream&);
 double error(const string&);
 
 // the symbol table
 map<string, double> table;
+// pointer to input stream
+istream* input;
 
 // function definitions
 double expr(bool get) // add and subtract
@@ -70,17 +72,17 @@ double number_value;
 string string_value;
 double prim(bool get) // handle primaries
 {
-	if (get) get_token();
+	if (get) get_token(*input);
 
 	switch (curr_tok) {
 		case Token_value::number: // floating point constant
 			{  double v = number_value;
-				get_token();
+				get_token(*input);
 				return v;
 			}
 		case Token_value::name:
 			{  double& v = table[string_value];
-				if (get_token() == Token_value::assign) v = expr(true);
+				if (get_token(*input) == Token_value::assign) v = expr(true);
 				return v;
 			}
 		case Token_value::minus: // unary minus
@@ -89,7 +91,7 @@ double prim(bool get) // handle primaries
 			{  double e = expr(true);
 				if (curr_tok != Token_value::rp)
 					return error("')' expected");
-				get_token(); // eat ')'
+				get_token(*input); // eat ')'
 				return e;
 			}
 		default:
@@ -146,7 +148,6 @@ double error(const string& s)
 
 int main(int argc, char* argv[])
 {
-	istream* input; // pointer to input stream
 	switch (argc) {
 		case 1: // read from standard input
 			input = &cin;
@@ -164,7 +165,7 @@ int main(int argc, char* argv[])
 	table["e"]  = 2.7182818284590452454;
 
 	while (*input) {
-		get_token();
+		get_token(*input);
 		if (curr_tok == Token_value::end) break;
 		if (curr_tok == Token_value::print) continue;
 		cout << expr(false) << '\n';
