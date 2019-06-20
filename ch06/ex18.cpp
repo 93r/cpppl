@@ -97,13 +97,13 @@ double prim(bool get) // handle primaries
 	}
 }
 
-Token_value get_token()
+Token_value get_token(istream& is)
 {
 	char ch = 0;
 
-	//cin >> ch;
+	//is >> ch;
 	do { // skip whitespace except '\n'
-		if (!cin.get(ch)) return curr_tok = Token_value::end;
+		if (!is.get(ch)) return curr_tok = Token_value::end;
 	} while (ch != '\n' && isspace(ch));
 
 	switch (ch) {
@@ -121,13 +121,13 @@ Token_value get_token()
 		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
 		case '.':
-			cin.putback(ch);
-			cin >> number_value;
+			is.putback(ch);
+			is >> number_value;
 			return curr_tok = Token_value::number;
 		default: // name, name =, or error
 			if (isalpha(ch)) {
-				cin.putback(ch);
-				cin >> string_value;
+				is.putback(ch);
+				is >> string_value;
 				return curr_tok = Token_value::name;
 			}
 			error("bad token");
@@ -144,9 +144,9 @@ double error(const string& s)
 	return 1.0;
 }
 
-istream* input; // pointer to input stream
 int main(int argc, char* argv[])
 {
+	istream* input; // pointer to input stream
 	switch (argc) {
 		case 1: // read from standard input
 			input = &cin;
