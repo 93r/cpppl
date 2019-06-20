@@ -27,6 +27,8 @@ map<string, double> table;
 // pointer to input stream
 istream* input;
 
+// --------------------------
+
 // function definitions
 double expr(bool get) // add and subtract
 {
@@ -82,14 +84,7 @@ double prim(bool get) // handle primaries
 			}
 		case Token_value::name:
 			{  double& v = table[string_value];
-				if (get_token(*input) == Token_value::assign) {
-					v = expr(true);
-				}
-				std::cerr << '!'
-					<< string_value
-					<< " --> "
-					<< table[string_value]
-					<< '\n';
+				if (get_token(*input) == Token_value::assign) v = expr(true);
 				return v;
 			}
 		case Token_value::minus: // unary minus
@@ -119,12 +114,8 @@ Token_value get_token(istream& is)
 		case 0:
 			return curr_tok = Token_value::end; // assign and return
 		case ';':
-		case '*':
-		case '/':
-		case '+':
-		case '-':
-		case '(':
-		case ')':
+		case '*': case '/': case '+': case '-':
+		case '(': case ')':
 		case '=':
 			return curr_tok = Token_value(ch);
 		case '0': case '1': case '2': case '3': case '4':
@@ -145,7 +136,6 @@ Token_value get_token(istream& is)
 						break;
 					}
 				}
-				cerr << '!' << string_value << '\n';
 				return curr_tok = Token_value::name;
 			}
 			error("bad token");
@@ -153,7 +143,7 @@ Token_value get_token(istream& is)
 	}
 }
 
-// used by 'error'
+// used by 'error()'
 int no_of_errors;
 double error(const string& s)
 {
@@ -187,8 +177,6 @@ int main(int argc, char* argv[])
 		cout << expr(false) << '\n';
 	}
 
-	for (auto& i : table)
-		cout << i.first << " --> " << i.second << '\n';
 	if (input != &cin) delete input;
 	return no_of_errors;
 }
