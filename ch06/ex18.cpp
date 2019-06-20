@@ -82,7 +82,14 @@ double prim(bool get) // handle primaries
 			}
 		case Token_value::name:
 			{  double& v = table[string_value];
-				if (get_token(*input) == Token_value::assign) v = expr(true);
+				if (get_token(*input) == Token_value::assign) {
+					v = expr(true);
+				}
+				std::cerr << '!'
+					<< string_value
+					<< " --> "
+					<< table[string_value]
+					<< '\n';
 				return v;
 			}
 		case Token_value::minus: // unary minus
@@ -129,7 +136,16 @@ Token_value get_token(istream& is)
 		default: // name, name =, or error
 			if (isalpha(ch)) {
 				is.putback(ch);
-				is >> string_value;
+				//is >> string_value;
+				string_value.clear();
+				while (is.get(ch)) {
+					if (isalnum(ch)) string_value += ch;
+					else {
+						is.putback(ch);
+						break;
+					}
+				}
+				cerr << '!' << string_value << '\n';
 				return curr_tok = Token_value::name;
 			}
 			error("bad token");
@@ -171,6 +187,8 @@ int main(int argc, char* argv[])
 		cout << expr(false) << '\n';
 	}
 
+	for (auto& i : table)
+		cout << i.first << " --> " << i.second << '\n';
 	if (input != &cin) delete input;
 	return no_of_errors;
 }
